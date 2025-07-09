@@ -24,6 +24,7 @@ const BrandCategoryPage: React.FC = () => {
     useEffect(() => {
         if (categories.length === 0) {
             fetchCategories();
+            console.log("Fetching categories...");
         }
     }, [categories.length, fetchCategories]);
 
@@ -57,18 +58,16 @@ const BrandCategoryPage: React.FC = () => {
     }
 
     // --- Render JSX ---
+
+    console.log("Brand is", brands);
+
     return (
         <div className="flex justify-center">
             <div className="w-6xl bg-amber-100 mt-1.5">
                 <LinkPage levelMainCategories={thisCategories.mainCategory.name} levelSubCategories={thisSubCategories.name}/>
                 <OptionMenu/>
-                <BrandOption/>
+                { brands.length !== 0 && <BrandOption brands={brands} />}
                 <h1>BrandCategory Page</h1>
-                {brands.map((brand) => (
-                    <div key={brand.id}>
-                        {brand.name}
-                    </div>
-                ))}
             </div>
         </div>
     );
