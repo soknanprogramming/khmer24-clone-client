@@ -7,9 +7,16 @@ import OptionMenu from '../components/OptionalMenu';
 import BrandOption from '../components/BrandOption';
 import type { getBrand } from '../types/getBrand';
 import axios from "axios";
+import { useLocation } from "react-router-dom";
+
 
 const BrandCategoryPage: React.FC = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
+    const location = useLocation();
+    // Create URLSearchParams object
+    const queryParams = new URLSearchParams(location.search);
+
+    const AdField = queryParams.get("ad_field");
 
     // --- All hooks are called at the top level ---
     const { categories, fetchCategories, loading } = useCategories();
@@ -64,9 +71,13 @@ const BrandCategoryPage: React.FC = () => {
     return (
         <div className="flex justify-center">
             <div className="w-6xl bg-amber-100 mt-1.5">
-                <LinkPage levelMainCategories={thisCategories.mainCategory.name} levelSubCategories={thisSubCategories.name}/>
+                {
+                    !AdField ? (<LinkPage levelMainCategories={thisCategories.mainCategory.name} levelSubCategories={thisSubCategories.name}/>) : (
+                        <LinkPage levelMainCategories={thisCategories.mainCategory.name} levelSubCategories={thisSubCategories.name} levelBrandCategories={AdField}/>)
+                }
+                
                 <OptionMenu/>
-                { brands.length !== 0 && <BrandOption brands={brands} />}
+                { (brands.length !== 0 && !AdField) && <BrandOption brands={brands} />}
                 <h1>BrandCategory Page</h1>
             </div>
         </div>
