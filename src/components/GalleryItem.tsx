@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
-import type { GalleryItemAndBrandProps } from "../types/GalleryItemAndBrandProp";
 
-const GalleryItem: React.FC<GalleryItemAndBrandProps> = ({imageURL, tittle, url, sizeItem}) => {
+type GalleryItemProps = {
+    imageURL : string,
+    tittle : string,
+    url : string,
+    sizeItem : 6 | 7 | 8 | 9 | 10;
+}
+
+const GalleryItem: React.FC<GalleryItemProps> = ({imageURL, tittle, url, sizeItem}) => {
     /* if sizeItem = 6 
      * a#w-48 a#p-6 a#h-40 => 48/6 = 8 ; 6/6 = 1 ; 40/6 = 6.66
      * a>div#size-20 => 20/6 = 3.33

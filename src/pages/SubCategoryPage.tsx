@@ -1,11 +1,12 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import LinkPage from "../components/LinkPage";
-import OptionalMenu from "../components/OptionalMenu";
+import OptionMenu from "../components/OptionMenu";
 import Categories from "../components/Categories";
 import type { Items } from "../types/categoriesItems";
 import useCategories from "../store/useCategories";
 import { toSlug } from '../func/toSlug';
+
 
 const SubCategoryPage: React.FC = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -35,7 +36,7 @@ const SubCategoryPage: React.FC = () => {
     <div className="flex justify-center">
       <div className="w-6xl bg-amber-100 mt-1.5">
         <LinkPage levelMainCategories={thisCategories.mainCategory.name}/>
-        <OptionalMenu />
+        <OptionMenu />
         <Categories sizeItem={7} items={subCategories} />
         <h1>SubCategory Page</h1>
       </div>
