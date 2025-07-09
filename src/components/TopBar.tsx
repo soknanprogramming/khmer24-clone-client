@@ -4,10 +4,6 @@ import { IoMdSearch } from "react-icons/io";
 import { MdAddAPhoto } from "react-icons/md";
 import { Link } from 'react-router-dom';
 
-// import Dropdown from './example/Dropdown';
-
-
-
 const TopBar: React.FC = () => {
     const { lang, changeLang } = useLang();
     return(
@@ -15,20 +11,20 @@ const TopBar: React.FC = () => {
             <nav className='bg-amber-200 w-6xl h-11 flex items-center justify-between px-4'>
                 <div id='logo-and-lang' className='w-48 h-8 bg-amber-50 flex items-center'>
                     <Link to="/">
-                        <img src="img/khmer24.webp" alt="" className='w-36'/>
+                        <img src="/img/khmer24.webp" alt="Khmer24 Logo" className='w-36'/>
                     </Link>
                     <div className='m-3 cursor-pointer' onClick={changeLang}>
+                        {/* Corrected Logic: Show the flag for the current language */}
                         {lang === "km" ? (
-                            <img src="img/en-40x40.webp" alt="" className='size-6'/>
+                            <img src="/img/km-40x40.webp" alt="Khmer Language" className="size-6" />
                         ) : (
-                            <img src="img/km-40x40.webp" alt="" className="size-6" />
+                            <img src="/img/en-40x40.webp" alt="English Language" className='size-6'/>
                         )}
                     </div>
                 </div>
                 <div id='search' className='w-md h-10 relative'>
-                    <div className='w-full flex absolute top-1/2 -translate-y-1/2'>   
+                    <div className='w-full flex absolute top-1/2 -translate-y-1/2'>
                         <button className='bg-blue-400 cursor-pointer py-1.5 border-2 border-r-[1px] w-36 flex-none'>All Category</button>
-                        {/* <Dropdown/> */}
                         <input className='bg-blue-400 px-2 py-1.5 border-2 border-l-[1px] flex-1' type="text" />
                     </div>
                     <button className='right-2 cursor-pointer absolute top-1/2 -translate-y-1/2'>
