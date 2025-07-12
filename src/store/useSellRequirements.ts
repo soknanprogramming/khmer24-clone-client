@@ -27,14 +27,6 @@ type SellRequirements = {
     Latitude: boolean,
     Longitude: boolean,
     CreatedDate: boolean,
-    Image: boolean,
-    Image2: boolean,
-    Image3: boolean,
-    Image4: boolean,
-    Image5: boolean,
-    Image6: boolean,
-    Image7: boolean,
-    Image8: boolean
 };
 
 
