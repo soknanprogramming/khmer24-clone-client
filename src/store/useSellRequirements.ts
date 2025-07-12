@@ -30,6 +30,7 @@ type SellRequirements = {
 };
 
 
+
 type RequirementsState = {
   requirements: SellRequirements | null;
   loading: boolean;
