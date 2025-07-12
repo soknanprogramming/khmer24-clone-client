@@ -5,8 +5,10 @@ import SubCategoryPage from "./pages/SubCategoryPage"
 import useCategories from "./store/useCategories"
 import BrandCategoryPage from "./pages/BrandCategoryPage"
 import { useEffect } from "react"
-
-
+import RegisterPage from "./pages/RegisterPage"
+import LoginPage from "./pages/LoginPage"
+import AuthPage from "./pages/AuthPage"
+import PostPage from "./pages/PostPage"
 const App = () => {
   const fetchCategories = useCategories((state) => state.fetchCategories);
   const categories = useCategories((state) => state.categories);
@@ -26,6 +28,10 @@ const App = () => {
       <TopBar/>
       <Routes>
         <Route path="/" element={<Home/>}/>
+        <Route path="/register" element={<RegisterPage/>}/>
+        <Route path="/login" element={<LoginPage/>}/>
+        <Route path="/auth" element={<AuthPage/>}/>
+        <Route path="post" element={<PostPage/>}/>
         <Route path="/:subCategoriesName" element={<SubCategoryPage/>}/>
         <Route path="/:subCategoriesName/:brandName" element={<BrandCategoryPage/>}/>
       </Routes>

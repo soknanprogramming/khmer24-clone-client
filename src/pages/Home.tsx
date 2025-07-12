@@ -7,24 +7,6 @@ import useCategories from "../store/useCategories";
 import { toSlug } from '../func/toSlug';
 
 
-const fakeItem : Items  = [
-    {
-        imageURL : "fake/computer-and-accessories.webp",
-        title : "Computers & Accessories",
-        url : "/subcategory"
-    },
-    {
-        imageURL : "fake/computer-and-accessories.webp",
-        title : "Computers & Accessories",
-        url : "/subcategory"
-    },
-    {
-        imageURL : "fake/computer-and-accessories.webp",
-        title : "Computers & Accessories",
-        url : "/subcategory"
-    },
-]
-
 const Home: React.FC = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const categories = useCategories((state) => state.categories);
