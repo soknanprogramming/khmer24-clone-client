@@ -4,6 +4,7 @@ import Ad from '../components/Ad';
 import AdLists from '../components/AdLists';
 import type { Items } from "../types/categoriesItems"
 import useCategories from "../store/useCategories";
+import type { mainAndSubCategories } from "../store/useCategories";
 import { toSlug } from '../func/toSlug';
 
 
@@ -11,7 +12,7 @@ const Home: React.FC = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const categories = useCategories((state) => state.categories);
 
-    const mainCategories: Items = categories.map((category) => ({
+    const mainCategories: Items = (!categories || []).map((category : mainAndSubCategories) => ({
         imageURL: `${apiUrl}/uploads/${category.mainCategory.icon}`,
         title: category.mainCategory.name,
         url: `/${toSlug(category.mainCategory.name)}`

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 
-type mainAndSubCategories = {
+export type mainAndSubCategories = {
   mainCategory: {
     id: number;
     name: string;
