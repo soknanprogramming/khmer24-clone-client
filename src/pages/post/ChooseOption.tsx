@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import useSellRequirements from '../../store/useSellRequirements';
 import PhotoUpload from './components/PhotoUpload'; // Assuming this component exists
 import { FaImages, FaMapMarkedAlt, FaPlusCircle } from 'react-icons/fa'; // For icons
+import LocationPopup from './components/LocationPopup';
+import LocationMap from './components/LocationMap';
 
 const ChooseOption: React.FC = () => {
   const { requirements, loading, error, fetchRequirements } = useSellRequirements();
@@ -219,19 +221,16 @@ const ChooseOption: React.FC = () => {
             {/* Location & Address */}
              <div>
                 <label className="font-semibold text-gray-700 block mb-1">Locations <b className="text-red-500">*</b></label>
-                <div className={`cursor-pointer px-3 flex items-center ${fieldHeightClass} ${inputBorderClass}`}>
-                    <p className="truncate text-gray-800">{formData.province}, {formData.district}, {formData.commune}</p>
-                </div>
+                <LocationPopup />
             </div>
              <div>
                 <label className="font-semibold text-gray-700 block mb-1">Address <b className="text-red-500">*</b></label>
                 <input type="text" name="address" value={formData.address} onChange={handleChange} className={`w-full ${fieldHeightClass} ${inputBorderClass} ${focusRingClass} px-3`} required/>
             </div>
             
-            <button type="button" className="w-full flex items-center justify-center space-x-2 border-2 text-gray-600 font-semibold rounded-lg py-2 hover:bg-gray-100">
-                <FaMapMarkedAlt />
-                <span>Set location on Google Maps</span>
-            </button>
+            <div id='mapping'>
+              <LocationMap/>
+            </div>
           </div>
         </div>
         
