@@ -23,8 +23,8 @@ const fakeLocation = [
 const LocationPopup: React.FC = () => {
     const [isPopupOpen, setPopupOpen] = useState(false);
     return (
-        <div>
-            <div onClick={() => {setPopupOpen(true)}} className="cursor-pointer px-3 flex items-center">
+        <div className="w-full">
+            <div onClick={() => {setPopupOpen(true)}} className="cursor-pointer flex items-center h-full">
                 <input type="text" className="w-full h-11 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-3" readOnly />
             </div>
             <Popup isOpen={isPopupOpen} onClose={() => setPopupOpen(false)}>

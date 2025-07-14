@@ -51,9 +51,9 @@ const LocationMap: React.FC = () => {
   return (
     <div>
       <MapContainer
+        className="rounded-md w-full h-52"
         center={[11.554304053577502, 104.84582522884013]}
-        zoom={6}
-        style={{ height: "200px", width: "100%" }}
+        zoom={9}
       >
         <TileLayer
           attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

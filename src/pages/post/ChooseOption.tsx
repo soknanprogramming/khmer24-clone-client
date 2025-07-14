@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import useSellRequirements from '../../store/useSellRequirements';
 import PhotoUpload from './components/PhotoUpload'; // Assuming this component exists
-import { FaImages, FaMapMarkedAlt, FaPlusCircle } from 'react-icons/fa'; // For icons
+import { FaImages, FaMapMarkedAlt, FaPlusCircle, FaMinusCircle } from 'react-icons/fa'; // Added FaMinusCircle
 import LocationPopup from './components/LocationPopup';
 import LocationMap from './components/LocationMap';
 
 const ChooseOption: React.FC = () => {
   const { requirements, loading, error, fetchRequirements } = useSellRequirements();
   const [photos, setPhotos] = useState<File[]>([]);
+  const [phoneNumbers, setPhoneNumbers] = useState<string[]>(['']); // Array to store multiple phone numbers
   const [formData, setFormData] = useState({
     ad_headline: '',
     category: '50', // Fixed as per your initial state
@@ -28,7 +29,7 @@ const ChooseOption: React.FC = () => {
     commune: 'Tuol Khpos',
     address: '',
     name: '',
-    phoneNumber: '',
+    phoneNumber: '', // Keep for backward compatibility
     email: '',
   });
 
@@ -52,6 +53,40 @@ const ChooseOption: React.FC = () => {
     }));
   };
 
+  // Handle phone number changes
+  const handlePhoneNumberChange = (index: number, value: string) => {
+    const newPhoneNumbers = [...phoneNumbers];
+    newPhoneNumbers[index] = value;
+    setPhoneNumbers(newPhoneNumbers);
+    
+    // Update formData with the first phone number for backward compatibility
+    setFormData(prev => ({
+      ...prev,
+      phoneNumber: newPhoneNumbers[0] || ''
+    }));
+  };
+
+  // Add new phone number
+  const addPhoneNumber = () => {
+    if (phoneNumbers.length < 3) {
+      setPhoneNumbers([...phoneNumbers, '']);
+    }
+  };
+
+  // Remove phone number
+  const removePhoneNumber = (index: number) => {
+    if (phoneNumbers.length > 1) {
+      const newPhoneNumbers = phoneNumbers.filter((_, i) => i !== index);
+      setPhoneNumbers(newPhoneNumbers);
+      
+      // Update formData with the first phone number for backward compatibility
+      setFormData(prev => ({
+        ...prev,
+        phoneNumber: newPhoneNumbers[0] || ''
+      }));
+    }
+  };
+
   const setDiscountType = (type: 'percent' | 'amount') => {
     setFormData((prev) => ({ ...prev, discountType: type }));
   };
@@ -64,6 +99,13 @@ const ChooseOption: React.FC = () => {
     for (const key in formData) {
       formDataToSend.append(key, (formData as any)[key]);
     }
+
+    // Append phone numbers
+    phoneNumbers.forEach((phone, index) => {
+      if (phone.trim()) {
+        formDataToSend.append(`phoneNumber${index + 1}`, phone);
+      }
+    });
 
     // Append photos
     photos.forEach((photo) => {
@@ -129,7 +171,7 @@ const ChooseOption: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               {/* Brand */}
               <div>
                 <label className="font-semibold text-gray-700 block mb-1">Brand <b className="text-red-500">*</b></label>
@@ -169,7 +211,7 @@ const ChooseOption: React.FC = () => {
               ))}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
                {/* Price */}
                <div>
                   <label className="font-semibold text-gray-700 block mb-1">Price <b className="text-red-500">*</b></label>
@@ -219,7 +261,7 @@ const ChooseOption: React.FC = () => {
             </div>
 
             {/* Location & Address */}
-             <div>
+             <div className='w-full'>
                 <label className="font-semibold text-gray-700 block mb-1">Locations <b className="text-red-500">*</b></label>
                 <LocationPopup />
             </div>
@@ -244,9 +286,40 @@ const ChooseOption: React.FC = () => {
                 </div>
                 <div>
                     <label className="font-semibold text-gray-700 block mb-1">Phone Number <b className="text-red-500">*</b></label>
-                    <div className="flex items-center space-x-2">
-                        <input type="tel" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} placeholder="Phone Number 1" className={`w-full ${fieldHeightClass} ${inputBorderClass} ${focusRingClass} px-3`} required/>
-                        <button type="button" className="text-blue-600 hover:text-blue-800"><FaPlusCircle size={24}/></button>
+                    <div className="space-y-2">
+                        {phoneNumbers.map((phone, index) => (
+                            <div key={index} className="flex items-center space-x-2">
+                                <input
+                                    type="tel"
+                                    name={`phoneNumber${index + 1}`}
+                                    value={phone}
+                                    onChange={(e) => handlePhoneNumberChange(index, e.target.value)}
+                                    placeholder={`Phone Number ${index + 1}`}
+                                    className={`flex-1 ${fieldHeightClass} ${inputBorderClass} ${focusRingClass} px-3`}
+                                    required={index === 0}
+                                />
+                                {phoneNumbers.length > 1 && (
+                                    <button
+                                        type="button"
+                                        onClick={() => removePhoneNumber(index)}
+                                        className="text-red-600 hover:text-red-800 p-1"
+                                        title="Remove phone number"
+                                    >
+                                        <FaMinusCircle size={20} />
+                                    </button>
+                                )}
+                                {index === phoneNumbers.length - 1 && phoneNumbers.length < 3 && (
+                                    <button 
+                                        type="button" 
+                                        onClick={addPhoneNumber} 
+                                        className="text-blue-600 hover:text-blue-800 p-1"
+                                        title="Add another phone number"
+                                    >
+                                        <FaPlusCircle size={24} />
+                                    </button>
+                                )}
+                            </div>
+                        ))}
                     </div>
                 </div>
                  <div>
