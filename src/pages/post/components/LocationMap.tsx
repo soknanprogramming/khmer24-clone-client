@@ -51,7 +51,7 @@ const LocationMap: React.FC = () => {
   return (
     <div>
       <MapContainer
-        className="rounded-md w-full h-52"
+        className="rounded-md w-full h-52 z-0"
         center={[11.554304053577502, 104.84582522884013]}
         zoom={9}
       >

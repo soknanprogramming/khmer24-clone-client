@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import useSellRequirements from '../../store/useSellRequirements';
 import PhotoUpload from './components/PhotoUpload'; // Assuming this component exists
-import { FaImages, FaMapMarkedAlt, FaPlusCircle, FaMinusCircle } from 'react-icons/fa'; // Added FaMinusCircle
+import { FaPlusCircle, FaMinusCircle } from 'react-icons/fa'; // Added FaMinusCircle
 import LocationPopup from './components/LocationPopup';
+import BrandPopup from './components/BrandPopup';
 import LocationMap from './components/LocationMap';
 
 const ChooseOption: React.FC = () => {
   const { requirements, loading, error, fetchRequirements } = useSellRequirements();
+  const [brandId, setBrandId] = useState<number | null>(null)
+  const [cityId, setCityId] = useState<number | null>(null)
+  const [districtsId, setDistrictsId] = useState<number | null>(null)
+  const [communesId, setCommunesId] = useState<number | null>(null)
   const [photos, setPhotos] = useState<File[]>([]);
   const [phoneNumbers, setPhoneNumbers] = useState<string[]>(['']); // Array to store multiple phone numbers
   const [formData, setFormData] = useState({
     ad_headline: '',
     category: '50', // Fixed as per your initial state
-    brand: '',
+    brand: brandId || null,
     condition: 'used', // Default to 'used'
     vga: '',
     cpu: '',
@@ -159,7 +164,7 @@ const ChooseOption: React.FC = () => {
             </div>
 
             {/* Category */}
-            <div>
+            {/* <div>
               <label className="font-semibold text-gray-700 block mb-1">
                 Choose a Category <b className="text-red-500">*</b>
               </label>
@@ -169,20 +174,13 @@ const ChooseOption: React.FC = () => {
                   Change
                 </button>
               </div>
-            </div>
+            </div> */}
 
             <div className="grid grid-cols-1 gap-4">
               {/* Brand */}
               <div>
                 <label className="font-semibold text-gray-700 block mb-1">Brand <b className="text-red-500">*</b></label>
-                <select name="brand" value={formData.brand} onChange={handleChange} className={`w-full ${fieldHeightClass} ${inputBorderClass} ${focusRingClass} px-2`} required>
-                    <option value="">Select Brand</option>
-                    <option value="apple">Apple</option>
-                    <option value="dell">Dell</option>
-                    <option value="hp">HP</option>
-                    <option value="lenovo">Lenovo</option>
-                    <option value="asus">Asus</option>
-                </select>
+                <BrandPopup subCategoriesId={1} setBrandId={setBrandId} />
               </div>
 
               {/* Condition */}
@@ -263,7 +261,7 @@ const ChooseOption: React.FC = () => {
             {/* Location & Address */}
              <div className='w-full'>
                 <label className="font-semibold text-gray-700 block mb-1">Locations <b className="text-red-500">*</b></label>
-                <LocationPopup />
+                <LocationPopup setCityId={setCityId} cityId={cityId} setDistrictsId={setDistrictsId} districtsId={districtsId} setCommunesId={setCommunesId} communesId={communesId}/>
             </div>
              <div>
                 <label className="font-semibold text-gray-700 block mb-1">Address <b className="text-red-500">*</b></label>
@@ -334,8 +332,6 @@ const ChooseOption: React.FC = () => {
             <button type="submit" className="w-full bg-red-500 text-white font-bold text-lg rounded-lg py-3 hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300">
                 Submit
             </button>
-            <p className="text-sm text-gray-600 mt-2">By Submitting, I agree to the posting rule of the Khmer24.com</p>
-            <a href="#" className="font-bold text-blue-600 hover:underline">Read posting rule</a>
         </div>
       </form>
     </div>
