@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import useSellRequirements from '../../store/useSellRequirements';
+import useComponents from '../../store/useComponents';
 import PhotoUpload from './components/PhotoUpload'; // Assuming this component exists
 import { FaPlusCircle, FaMinusCircle } from 'react-icons/fa'; // Added FaMinusCircle
 import LocationPopup from './components/LocationPopup';
@@ -8,6 +9,12 @@ import LocationMap from './components/LocationMap';
 
 const ChooseOption: React.FC = () => {
   const { requirements, loading, error, fetchRequirements } = useSellRequirements();
+  const { 
+    vga, cpu, ram, storage, screen, 
+    loading: componentsLoading, 
+    error: componentsError, 
+    fetchAllComponents 
+  } = useComponents();
   const [brandId, setBrandId] = useState<number | null>(null)
   const [cityId, setCityId] = useState<number | null>(null)
   const [districtsId, setDistrictsId] = useState<number | null>(null)
@@ -42,8 +49,10 @@ const ChooseOption: React.FC = () => {
     // We keep your logic to fetch requirements, though it's not used in this static UI
     // In a real app, you would use 'requirements' to populate dropdowns
     fetchRequirements(1);
+    // Fetch all components data
+    fetchAllComponents();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchRequirements]);
+  }, [fetchRequirements, fetchAllComponents]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -127,8 +136,8 @@ const ChooseOption: React.FC = () => {
   const inputBorderClass = 'border border-gray-300 rounded-md';
   const focusRingClass = 'focus:ring-2 focus:ring-blue-500 focus:border-blue-500';
 
-  if (loading) return <div className="text-center py-10">Loading form requirements...</div>;
-  if (error) return <div className="text-center py-10 text-red-500">Error: {error}</div>;
+  if (loading || componentsLoading) return <div className="text-center py-10">Loading form requirements...</div>;
+  if (error || componentsError) return <div className="text-center py-10 text-red-500">Error: {error || componentsError}</div>;
 
   return (
     <div className="bg-gray-50 p-4 font-sans">
@@ -192,21 +201,70 @@ const ChooseOption: React.FC = () => {
                 </div>
               </div>
 
-              {/* Other Spec Fields */}
-              {['VGA', 'CPU', 'RAM', 'Storage', 'Screen Size'].map((field) => (
-                 <div key={field}>
-                     <label className="font-semibold text-gray-700 block mb-1">{field} <b className="text-red-500">*</b></label>
-                     <select name={field.toLowerCase().replace(' ', '')} onChange={handleChange} className={`w-full ${fieldHeightClass} ${inputBorderClass} ${focusRingClass} px-2`} required>
-                        {/* Add options based on the field */}
-                        <option value="">Select {field}</option>
-                        {field === 'VGA' && ['Integrated', '2GB & Under', '4GB', '6GB', '8GB', '16GB & Larger'].map(o => <option key={o} value={o.toLowerCase().replace(/ /g, '-')}>{o}</option>)}
-                        {field === 'CPU' && ['M1/M2/M3', 'Intel Core i9', 'Intel Core i7', 'Intel Core i5', 'AMD Ryzen 7', 'AMD Ryzen 5'].map(o => <option key={o} value={o.toLowerCase().replace(/ /g, '-')}>{o}</option>)}
-                        {field === 'RAM' && ['4GB', '8GB', '16GB', '32GB', '64GB & Larger'].map(o => <option key={o} value={o.toLowerCase().replace(/ /g, '-')}>{o}</option>)}
-                        {field === 'Storage' && ['128GB SSD', '256GB SSD', '512GB SSD', '1TB SSD', '2TB SSD & Larger'].map(o => <option key={o} value={o.toLowerCase().replace(/ /g, '-')}>{o}</option>)}
-                        {field === 'Screen Size' && ['13" - 13.9"', '14" - 14.9"', '15" - 15.9"', '16" - 16.9"', '17" & Larger'].map(o => <option key={o} value={o.toLowerCase().replace(/ /g, '-')}>{o}</option>)}
-                     </select>
-                 </div>
-              ))}
+              {/* VGA */}
+              <div>
+                <label className="font-semibold text-gray-700 block mb-1">VGA <b className="text-red-500">*</b></label>
+                <select name="vga" value={formData.vga} onChange={handleChange} className={`w-full ${fieldHeightClass} ${inputBorderClass} ${focusRingClass} px-2`} required>
+                  <option value="">Select VGA</option>
+                  {vga.map((item) => (
+                    <option key={item.ID} value={item.ID}>
+                      {item.Name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* CPU */}
+              <div>
+                <label className="font-semibold text-gray-700 block mb-1">CPU <b className="text-red-500">*</b></label>
+                <select name="cpu" value={formData.cpu} onChange={handleChange} className={`w-full ${fieldHeightClass} ${inputBorderClass} ${focusRingClass} px-2`} required>
+                  <option value="">Select CPU</option>
+                  {cpu.map((item) => (
+                    <option key={item.ID} value={item.ID}>
+                      {item.Name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* RAM */}
+              <div>
+                <label className="font-semibold text-gray-700 block mb-1">RAM <b className="text-red-500">*</b></label>
+                <select name="ram" value={formData.ram} onChange={handleChange} className={`w-full ${fieldHeightClass} ${inputBorderClass} ${focusRingClass} px-2`} required>
+                  <option value="">Select RAM</option>
+                  {ram.map((item) => (
+                    <option key={item.ID} value={item.ID}>
+                      {item.Name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Storage */}
+              <div>
+                <label className="font-semibold text-gray-700 block mb-1">Storage <b className="text-red-500">*</b></label>
+                <select name="storage" value={formData.storage} onChange={handleChange} className={`w-full ${fieldHeightClass} ${inputBorderClass} ${focusRingClass} px-2`} required>
+                  <option value="">Select Storage</option>
+                  {storage.map((item) => (
+                    <option key={item.ID} value={item.ID}>
+                      {item.Name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Screen Size */}
+              <div>
+                <label className="font-semibold text-gray-700 block mb-1">Screen Size <b className="text-red-500">*</b></label>
+                <select name="screenSize" value={formData.screenSize} onChange={handleChange} className={`w-full ${fieldHeightClass} ${inputBorderClass} ${focusRingClass} px-2`} required>
+                  <option value="">Select Screen Size</option>
+                  {screen.map((item) => (
+                    <option key={item.ID} value={item.ID}>
+                      {item.Name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 gap-4">
